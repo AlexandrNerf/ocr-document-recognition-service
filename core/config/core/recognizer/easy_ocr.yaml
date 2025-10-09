@@ -1,0 +1,8 @@
+_target_: pipelines.recognizer.easy_ocr.EasyOCRRecognizer
+lang_list: ['en', 'ru', 'tjk']
+cuda: False
+model_storage_directory: None
+user_network_directory: None
+verbose: False
+quantize: False
+download_enabled: True

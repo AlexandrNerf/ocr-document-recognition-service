@@ -1,0 +1,5 @@
+_target_: pipelines.detectors.fast.FASTDetector
+cuda: True
+assume_straight_pages: False
+pretrained: True
+weights_path: null

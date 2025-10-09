@@ -1,0 +1,5 @@
+outs:
+- md5: 6ea5b90396830a0ce75ce0a59a6b899c
+  size: 71980486
+  hash: md5
+  path: model_vgg16_lstm_best.pth

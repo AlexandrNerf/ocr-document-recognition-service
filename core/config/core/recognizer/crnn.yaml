@@ -1,0 +1,13 @@
+_target_: pipelines.recognizer.crnn.CRNNRecognizer
+
+backbone:
+  name: 'vgg16'
+  pretrained: true
+
+cuda: True
+decoder: lstm
+weights_path: ../weights/crnn_vgg16_lstm256_baseline__2025_10_07.pth
+input_shape: [3, 40, 200]
+vocab: 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyzЁІАБВГДЕЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯабвгдежзийклмнопрстуфхцчшщъыьэюяёіҒғҚқҢңҮүҰұҺһӘәӨө0123456789!"#$%&)*+,-./\\:;<=>?@()‚„•°[]^_`{|}~«»“”’—–₸₽№£ '
+filter_ctc: False
+frames: 4

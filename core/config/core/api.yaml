@@ -1,0 +1,7 @@
+_target_: pipelines.run.CorePipeline
+defaults:
+  - loader: api_loader
+  - detector: craft
+  - postprocessor: simple
+  - preprocessor: simple
+  - recognizer: crnn
