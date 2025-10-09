@@ -1,0 +1,7 @@
+[core]
+    remote = models
+    autostage = true
+['remote "models"']
+    url = https://huggingface.co/NerfmanOriginal/ocr-diploma-models
+['remote "data"']
+    url = https://huggingface.co/datasets/NerfmanOriginal/OCR-data-900k\

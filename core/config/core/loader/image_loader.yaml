@@ -1,0 +1,3 @@
+_target_: pipelines.loaders.image_loader.ImageLoader
+image_path: ${images_dir}
+pdf_zoom: 1

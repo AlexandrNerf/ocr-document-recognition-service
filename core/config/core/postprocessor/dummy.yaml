@@ -1,0 +1,1 @@
+_target_: pipelines.postprocessor.dummy.DummyPostprocessor

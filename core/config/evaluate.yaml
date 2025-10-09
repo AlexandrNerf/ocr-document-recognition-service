@@ -1,0 +1,20 @@
+detector_metrics:
+  - _target_: utils.metrics.UltralyticsMetrics
+
+recognizer_metrics:
+  - _target_: utils.metrics.OCRMetrics
+    iou_threshold: 0.6
+
+print_every_step: 100
+
+defaults:
+  - _self_
+  - core: core
+  - override shift_ocr/loader: eval_loader
+  - override hydra/hydra_logging: disabled
+  - override hydra/job_logging: evaluate
+
+hydra:
+  output_subdir: null
+  run:
+    dir: .

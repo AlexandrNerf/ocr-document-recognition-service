@@ -1,0 +1,4 @@
+_target_: pipelines.loaders.eval_loader.EvalLoader
+image_path: assets/images
+label_path: assets/data
+labels_format: yolo
