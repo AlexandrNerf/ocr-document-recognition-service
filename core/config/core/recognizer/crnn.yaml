@@ -6,7 +6,7 @@ backbone:
 
 cuda: True
 decoder: lstm
-weights_path: ../weights/crnn_vgg16_lstm256_baseline__2025_10_07.pth
+weights_path: ../weights/crnn_vgg16_lstm256_baseline__2025_10_08.pth
 input_shape: [3, 40, 200]
 vocab: 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyzЁІАБВГДЕЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯабвгдежзийклмнопрстуфхцчшщъыьэюяёіҒғҚқҢңҮүҰұҺһӘәӨө0123456789!"#$%&)*+,-./\\:;<=>?@()‚„•°[]^_`{|}~«»“”’—–₸₽№£ '
 filter_ctc: False

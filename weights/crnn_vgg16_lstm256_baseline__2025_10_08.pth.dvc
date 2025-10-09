@@ -1,0 +1,5 @@
+outs:
+- md5: d0beeb076d6932fd5efb24e389c698e9
+  size: 71982584
+  hash: md5
+  path: crnn_vgg16_lstm256_baseline__2025_10_08.pth
