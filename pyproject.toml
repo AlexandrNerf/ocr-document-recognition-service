@@ -1,6 +1,6 @@
 [project]
-name = "ocr-project"
-version = "0.1.0"
+name = "ocr-document-recognition-service"
+version = "1.0.0"
 description = "OCR project from Nerfman"
 authors = [
     {name = "Alex Nerf",email = "a.varnakin@g.nsu.ru"}
