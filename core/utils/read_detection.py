@@ -57,31 +57,21 @@ def read_detections(
         for line in lines:
             try:
                 text, coords_str = line.split(" ", 1)
-                if box_format == 'yolo':
-                    x_cn, y_cn, w_n, h_n = list(map(float, coords_str.split(' ')))
+                x_cn, y_cn, w_n, h_n = list(map(float, coords_str.split(' ')))
 
-                    tl_x, tl_y, br_x, br_y = (
-                        (x_cn - w_n / 2) * width,
-                        (y_cn - h_n / 2) * height,
-                        (x_cn + w_n / 2) * width,
-                        (y_cn + h_n / 2) * height,
-                    )
+                tl_x, tl_y, br_x, br_y = (
+                    (x_cn - w_n / 2) * width,
+                    (y_cn - h_n / 2) * height,
+                    (x_cn + w_n / 2) * width,
+                    (y_cn + h_n / 2) * height,
+                )
 
-                    absolute_box = [
-                        (int(tl_x), int(tl_y)),
-                        (int(br_x), int(tl_y)),
-                        (int(br_x), int(br_y)),
-                        (int(tl_x), int(br_y)),
-                    ]
-
-                else:
-                    tl_x, tl_y, br_x, br_y = ast.literal_eval(coords_str)
-                    absolute_box = [
-                        (int(tl_x), int(tl_y)),
-                        (int(br_x), int(tl_y)),
-                        (int(br_x), int(br_y)),
-                        (int(tl_x), int(br_y)),
-                    ]
+                absolute_box = [
+                    (int(tl_x), int(tl_y)),
+                    (int(br_x), int(tl_y)),
+                    (int(br_x), int(br_y)),
+                    (int(tl_x), int(br_y)),
+                ]
 
                 relative_box = [
                     (tl_x / width, tl_y / height),

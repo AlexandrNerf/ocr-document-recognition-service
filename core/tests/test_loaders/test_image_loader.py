@@ -2,9 +2,9 @@ import numpy as np
 import pytest
 import rootutils
 
-root = rootutils.setup_root(__file__, indicator=".project-roots", pythonpath=True)
+root = rootutils.setup_root(__file__, indicator=".core-root", pythonpath=True)
 
-from shift_ocr.loaders.image_loader import ImageLoader
+from pipelines.loaders.image_loader import ImageLoader
 
 
 @pytest.mark.parametrize(

@@ -2,10 +2,7 @@ from collections import Counter
 
 import numpy as np
 import torch
-from doctr.datasets import VOCABS
 from doctr.models.recognition.crnn.pytorch import CTCPostProcessor
-from torch import nn
-from torch.nn import functional as F
 
 duplicate_map = {
     'А': 'A',
