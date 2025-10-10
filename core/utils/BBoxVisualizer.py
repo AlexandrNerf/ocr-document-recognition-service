@@ -97,7 +97,7 @@ class BoundingBoxVisualizer:
                     'layer': 'below',
                 }
         fig = go.Figure(go.Image(z=image))
-        #fig.add_layout_image(**image_params)
+
         fig.update_layout(
             width=width,
             height=height,
@@ -138,8 +138,6 @@ class BoundingBoxVisualizer:
                     name=f'confidences: ({det_confidence:.2f}, {ocr_confidence:.2f})',
                 )
             )
-        #fig.update_xaxes(visible=False, range=[0, width])
-        #fig.update_yaxes(visible=False, range=[0, height])
 
         fig.update_layout(  # Отрисовка легенды с информацией о детекциях и confidence.
             legend=dict(
@@ -205,27 +203,6 @@ class BoundingBoxVisualizer:
         )
         fig.show()
 
-    def __convertor(self, pred, img_width, img_height):
-        """Конвертирует координаты из yolo в pascal_voc.
-
-        Параметры:
-        :param pred: List[int] - Содержит координаты YOLO в формате [x_center, y_center, b_width, b_height].
-        :param img_width: int - Ширина изображения.
-        :param img_height: int - Высота изображения.
-        """
-        x_center, y_center, box_width, box_height = pred
-        x_center *= img_width
-        y_center *= img_height
-        box_width *= img_width
-        box_height *= img_height
-
-        x0 = x_center - box_width / 2
-        x1 = x_center + box_width / 2
-        y0 = y_center - box_height / 2
-        y1 = y_center + box_height / 2
-
-        return x0, y0, x1, y1
-
     def _draw_image_with_bboxes(
         self, image_path: str | Image.Image | np.ndarray, predictions: list[Prediction]
     ):
@@ -267,7 +244,7 @@ class BoundingBoxVisualizer:
 
             bbox_x = [
                 x + offset for x, _ in pred.absolute_box
-            ]  # [x0 + offset, x1 + offset, x1 + offset, x0 + offset, x0 + offset]
+            ]
             bbox_y = [height - y for _, y in pred.absolute_box]
             bbox_x.append(bbox_x[0])
             bbox_y.append(bbox_y[0])

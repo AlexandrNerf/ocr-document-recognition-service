@@ -4,10 +4,10 @@ import numpy as np
 import pytest
 import rootutils
 
-root = rootutils.setup_root(__file__, indicator=".project-roots", pythonpath=True)
+root = rootutils.setup_root(__file__, indicator=".core-root", pythonpath=True)
 
-from shift_ocr.loaders.eval_loader import EvalLoader
-from shift_ocr.shift_ocr.data_classes import Detection
+from pipelines.loaders.eval_loader import EvalLoader
+from data.data_classes import Predictions
 
 
 @pytest.mark.parametrize(
@@ -21,5 +21,5 @@ def test_image_loader_load(img_path, label_path):
         assert img.dtype == np.uint8
         assert img.ndim == 3 and img.shape[2] == 3
         assert isinstance(labels, list)
-        assert all(isinstance(el, Detection) for el in labels)
+        assert all(isinstance(el, Predictions) for el in labels)
     loader.end_stream()
