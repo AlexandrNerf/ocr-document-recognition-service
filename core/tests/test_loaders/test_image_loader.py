@@ -3,14 +3,15 @@ import pytest
 import rootutils
 
 root = rootutils.setup_root(__file__, indicator=".core-root", pythonpath=True)
+
 from pipelines.loaders.image_loader import ImageLoader
 
 
 @pytest.mark.parametrize(
-    "path",
+    'path',
     [
-        f"{root}/assets/images",
-        f"{root}/assets/pdf",
+        f'{root}/assets/images',
+        f'{root}/assets/pdf',
     ],
 )
 def test_image_loader_load(path):

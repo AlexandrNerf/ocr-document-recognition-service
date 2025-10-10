@@ -1,18 +1,18 @@
 import rootutils
-import uvicorn
 
 rootutils.setup_root(__file__, indicator=".core-root", pythonpath=True)
-from data.data_classes import Prediction
+
+import uvicorn
 from fastapi import FastAPI
+
+from data.data_classes import Prediction
 from pipelines.default.model import ImageBase64
 from pipelines.run import CorePipeline
-
-from core.utils.get_core import get_shift_ocr_instance
+from utils.base64utils import decode_image
+from utils.get_shift_ocr import get_shift_ocr_instance
 
 app = FastAPI()
 core_instance: CorePipeline = get_shift_ocr_instance()
-
-PORT = 8000
 
 
 @app.post("/predictText")
@@ -31,4 +31,5 @@ def predict_text(img_bytes: ImageBase64, file_format: str) -> list[Prediction]:
 
 
 if __name__ == "__main__":
-    uvicorn.run("app:app", host="0.0.0.0", port=PORT, reload=True)
+    print(core_instance)
+    uvicorn.run("app:app", host="0.0.0.0", port=8000, reload=True)

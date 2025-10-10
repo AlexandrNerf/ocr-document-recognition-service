@@ -1,17 +1,14 @@
-from abc import abstractmethod
+from abc import ABC, abstractmethod
+import numpy as np
 
 from data.data_classes import Prediction
 from pipelines.default.base import BasePipeline
-
 
 class Recognizer(BasePipeline):
 
     def _run(self, data):
         return {
-            "predictions": [
-                self.recognize(post_detections)
-                for post_detections in data["post_detections"]
-            ]
+            'predictions': [self.recognize(post_detections) for post_detections in data['post_detections']]
         }
 
     @abstractmethod

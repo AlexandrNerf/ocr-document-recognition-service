@@ -1,8 +1,10 @@
 import os
+from typing import Iterator
 
 import cv2
 import fitz
 import numpy as np
+
 from pipelines.default.loader import Loader
 
 
@@ -17,12 +19,12 @@ class ImageLoader(Loader):
         self.images = []
         self.stream = True
 
-    def load(self, data) -> list[np.ndarray]:
+    def load(self) -> list[np.ndarray]:
         for file_path in self.files:
             if not self.stream:
                 break
             ext = os.path.splitext(file_path)[1]
-            if ext == ".pdf":
+            if ext == '.pdf':
                 image = self._pdf_to_img(file_path)
             else:
                 image = cv2.imread(file_path)

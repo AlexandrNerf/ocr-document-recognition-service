@@ -2,10 +2,11 @@ from abc import ABC, abstractmethod
 from typing import List
 
 import torch
-from data.data_classes import Prediction
 from fuzzywuzzy import fuzz
 from ultralytics.models.yolo.detect.val import DetectionValidator
 from ultralytics.utils.metrics import DetMetrics
+
+from data.data_classes import Prediction
 
 
 class Metrics(ABC):
@@ -30,7 +31,7 @@ class UltralyticsMetrics(Metrics):
         self.validator = DetectionValidator()
 
     def __str__(self):
-        return "UltralyticsMetrics: recall, mAP50, mAP50-95"
+        return 'UltralyticsMetrics: recall, mAP50, mAP50-95'
 
     def process(self, detections: List[Prediction], gt_detections: List[Prediction]):
         pred_conf = [detection.score for detection in detections]
@@ -59,17 +60,16 @@ class UltralyticsMetrics(Metrics):
         tp = self.validator._process_batch(pred_boxes, gt_boxes, gt_cls).int()
         self.metrics.process(tp, pred_conf, pred_cls, gt_cls)
 
-    def get_metrics(self):  # noqa: WPS615
-        metric_result = ""
-        for metric, metric_value in self.metrics.results_dict.items():  # noqa: WPS519
-            metric_result += f"{metric}: {metric_value} \n"
-        return metric_result
+    def get_metrics(self):
+        result = ''
+        for key, item in self.metrics.results_dict.items():
+            result += f'{key}: {item} \n'
+        return result
 
 
 class OCRMetrics:
     """
-    :param float iou_threshold: Порог IoU от которого мы считаем
-                            детекцию успешной. По умолчанию - 0.5.
+    :param float iou_threshold: Порог IoU от которого мы считаем детекцию успешной. По умолчанию - 0.5.
     """
 
     def __init__(self, iou_threshold: float = 0.5):
@@ -102,7 +102,7 @@ class OCRMetrics:
         box2_area = (x2_gt - x1_gt) * (y2_gt - y1_gt)
         union_area = box1_area + box2_area - inter_area
 
-        return inter_area / (union_area + 1e-6)
+        return inter_area / union_area if union_area != 0 else 0
 
     def process(self, detections: List[Prediction], gt_detections: List[Prediction]):
         """
@@ -154,4 +154,4 @@ class OCRMetrics:
 
     def get_metrics(self):
         """Возвращает строку с метриками WRR и CRR."""
-        return f"WRR: {self.get_wrr():.2f}, CRR: {self.get_crr():.2f}"
+        return f'WRR: {self.get_wrr():.2f}, CRR: {self.get_crr():.2f}'

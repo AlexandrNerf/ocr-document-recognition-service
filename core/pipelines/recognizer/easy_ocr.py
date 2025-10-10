@@ -1,9 +1,12 @@
 from typing import Optional
 
 import easyocr
+import numpy as np
 import torch
+
 from data.data_classes import Prediction
 from pipelines.default.recognizer import Recognizer
+from utils.read_detection import crop_masked_rectangle
 
 
 class EasyOCRRecognizer(Recognizer):
@@ -15,7 +18,7 @@ class EasyOCRRecognizer(Recognizer):
         verbose: bool,
         quantize: bool,
         download_enabled: bool,
-        lang_list: Optional[list] = ["en", "ru", "tjk"],
+        lang_list: Optional[list] = ['en', 'ru', 'tjk'],
     ):
         """
         Recognizer из EasyOCR
@@ -23,8 +26,7 @@ class EasyOCRRecognizer(Recognizer):
         Args:
             lang_list (list): Словари языков для распознавания
             cuda (bool): Использовать GPU
-            model_storage_directory (str): Путь до модели.
-                    Если пустой, выбирает из переменных среды
+            model_storage_directory (str): Путь до модели. Если пустой, выбирает из переменных среды
             user_network_directory (str): Путь до пользовательской модели
             verbose (bool): Выводить комментарии
             quantize (bool): Квантизация сети
@@ -47,7 +49,7 @@ class EasyOCRRecognizer(Recognizer):
         for det in post_detections:
             roi = det.crop
             if roi.size == 0:
-                det.text = ""
+                det.text = ''
                 det.text_score = 1.0
                 continue
 
@@ -57,7 +59,7 @@ class EasyOCRRecognizer(Recognizer):
                 text: str = results[0][1]
                 score: float = results[0][2]
             else:
-                text, score = "", 1.0
+                text, score = '', 1.0
 
             det.text = text
             det.text_score = score
