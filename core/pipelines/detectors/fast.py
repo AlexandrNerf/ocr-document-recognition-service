@@ -1,13 +1,10 @@
-import os
 from collections import OrderedDict
 from typing import List, Optional
 
 import numpy as np
 import torch
-from doctr.models import detection_predictor, fast_base, reparameterize
-from doctr.models.builder import DocumentBuilder
-
 from data.data_classes import Prediction
+from doctr.models import detection_predictor, fast_base, reparameterize
 from pipelines.default.detector import Detector
 
 
@@ -24,10 +21,12 @@ class FASTDetector(Detector):
         Детектор текста FAST из библиотеки docTR (fast_base).
         Args:
             cuda (bool): Использование видеокарты
-            assume_straight_pages (bool): Когда True, боксы прямоугольные. По умолчанию False
+            assume_straight_pages (bool): Когда True, боксы прямоугольные.
+                                        По умолчанию False
             pretrained (bool): Использовать предобученную модель
             weights_path (str): Использовать свои веса
-            preserve_aspect_ratio (bool): При увеличении изображения не приводить к формату 1:1 ()
+            preserve_aspect_ratio (bool): При увеличении изображения
+                                не приводить к формату 1:1
         Returns:
             out (FASTDetector): модель FAST детектора
         Пример:
@@ -41,11 +40,11 @@ class FASTDetector(Detector):
 
         if weights_path:
             weights = torch.load(weights_path)
-            if 'state_dict' in weights:
+            if "state_dict" in weights:
                 # Загрузка весов из lightning
                 new_weights = OrderedDict()
-                for k, v in weights['state_dict'].items():
-                    new_key = k.replace('net.', '')
+                for k, v in weights["state_dict"].items():  # noqa: WPS529
+                    new_key = k.replace("net.", "")
                     new_weights[new_key] = v
                 fast.load_state_dict(new_weights)
             else:
@@ -70,7 +69,7 @@ class FASTDetector(Detector):
         img_h, img_w, _ = image.shape
         detected: List[Prediction] = []
         for page in boxes:
-            for box in page['words']:
+            for box in page["words"]:
                 if self.polygons:
                     top_left_x, top_left_y = box[0]
                     top_right_x, top_right_y = box[1]
@@ -79,7 +78,13 @@ class FASTDetector(Detector):
 
                     _, conf = box[4]
                 else:
-                    top_left_x, top_left_y, bottom_right_x, bottom_right_y, conf = box
+                    (
+                        top_left_x,
+                        top_left_y,
+                        bottom_right_x,
+                        bottom_right_y,
+                        conf,
+                    ) = box
                     top_right_x, top_right_y = bottom_right_x, top_left_y
                     bottom_left_x, bottom_left_y = top_left_x, bottom_right_y
 
