@@ -2,39 +2,40 @@ from collections import Counter
 
 import numpy as np
 import torch
+from constansts import EPS, SPECIAL_VOCAB_CHARS
 from doctr.models.recognition.crnn.pytorch import CTCPostProcessor
 
 duplicate_map = {
-    'А': 'A',
-    'а': 'a',
-    'В': 'B',
-    'в': 'b',
-    'Е': 'E',
-    'е': 'e',
-    'К': 'K',
-    'к': 'k',
-    'М': 'M',
-    'м': 'm',
-    'Н': 'H',
-    'н': 'h',
-    'О': 'O',
-    'о': 'o',
-    'Р': 'P',
-    'р': 'p',
-    'С': 'C',
-    'с': 'c',
-    'Т': 'T',
-    'т': 't',
-    'У': 'Y',
-    'у': 'y',
-    'Х': 'X',
-    'х': 'x',
+    "А": "A",
+    "а": "a",
+    "В": "B",
+    "в": "b",
+    "Е": "E",
+    "е": "e",
+    "К": "K",
+    "к": "k",
+    "М": "M",
+    "м": "m",
+    "Н": "H",
+    "н": "h",
+    "О": "O",
+    "о": "o",
+    "Р": "P",
+    "р": "p",
+    "С": "C",
+    "с": "c",
+    "Т": "T",
+    "т": "t",
+    "У": "Y",
+    "у": "y",
+    "Х": "X",
+    "х": "x",
 }
 
 lang_defs = {
     "en": "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz",
     "ru": "АБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯабвгдеёжзийклмнопрстуфхцчшщъыьэюя",
-    "kz": "ӘІҢҒҮҰҚӨҺәіңғүұқөһАБВГДЕЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯабвгдежзийклмнопрстуфхцчшщъыьэюя",
+    "kz": "ӘІҢҒҮҰҚӨҺәіңғүұқөһАБВГДЕЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯабвгдежзийклмнопрстуфхцчшщъыьэюя",  # noqa: E501
 }
 
 # Нормализуем символы
@@ -51,23 +52,23 @@ for chars in norm_chars_by_lang.values():
 
 # Группировка (для полного вокаба)
 # common = {c for c, count in char_lang_count.items() if count > 1}
-en_only = set([c for c in lang_defs['en']])  # norm_chars_by_lang["en"] - common
-ru_only = set([c for c in lang_defs['ru']])  # norm_chars_by_lang["ru"] - common
-kz_only = set([c for c in lang_defs['kz']])  # norm_chars_by_lang["kz"] - common
+en_only = set([c for c in lang_defs["en"]])  # norm_chars_by_lang["en"] - common
+ru_only = set([c for c in lang_defs["ru"]])  # norm_chars_by_lang["ru"] - common
+kz_only = set([c for c in lang_defs["kz"]])  # norm_chars_by_lang["kz"] - common
 
-summary = ''.join(sorted(en_only | ru_only | kz_only))
+summary = "".join(sorted(en_only | ru_only | kz_only))
 
 # Итоговый vocab с общими символами
 
-VOCAB_MULTI: str = summary + '0123456789!"#$%&)*+,-./:;<=>?@[\]^_`{|}~«»“”’—–₸₽'
+VOCAB_MULTI: str = summary + SPECIAL_VOCAB_CHARS
 
 char_to_idx = {c: i for i, c in enumerate(VOCAB_MULTI)}
 
 # Индексы по группам
 GROUP_IDXS: dict[str, set[int]] = {
-    "en": {char_to_idx[c] for c in en_only},
-    "ru": {char_to_idx[c] for c in ru_only},
-    "kz": {char_to_idx[c] for c in kz_only},
+    "en": {char_to_idx[char] for char in en_only},
+    "ru": {char_to_idx[char] for char in ru_only},
+    "kz": {char_to_idx[char] for char in kz_only},
 }
 
 
@@ -81,15 +82,16 @@ class MaskedCTCDecoder(CTCPostProcessor):
         super().__init__(vocab)
         self.group_indices = group_indices
         self.detect_frames = detect_frames
+        self.language_labels = ["en", "ru", "kz"]
 
     def detect_language(self, logits: torch.Tensor) -> str:
         # Используем только первые N срезов
         top_logits = logits[: self.detect_frames]
         top_indices = torch.argmax(top_logits, dim=-1)
 
-        lang_counts = {lang: 0 for lang in ['en', 'ru', 'kz']}
+        lang_counts = {lang: 0 for lang in self.language_labels}
         for idx in top_indices:
-            for lang in ['en', 'ru', 'kz']:
+            for lang in self.language_labels:
                 if idx.item() in self.group_indices[lang]:
                     lang_counts[lang] += 1
 
@@ -103,8 +105,8 @@ class MaskedCTCDecoder(CTCPostProcessor):
         allowed = self.group_indices["common"] | self.group_indices[detected_lang]
 
         # Маскируем запрещённые
-        mask = torch.full_like(logits, -1e9)
+        mask = torch.full_like(logits, EPS)
         mask[:, np.array(allowed)] = 0
         masked_logits = logits + mask
 
-        return super().__call__(masked_logits)
+        return self(masked_logits)

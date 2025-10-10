@@ -1,5 +1,4 @@
 import logging
-import os
 from typing import List
 
 import hydra
@@ -8,7 +7,7 @@ from hydra.utils import instantiate
 from omegaconf import DictConfig
 from tqdm.auto import tqdm
 
-rootutils.setup_root(__file__, indicator='.core-root', pythonpath=True)
+rootutils.setup_root(__file__, indicator=".core-root", pythonpath=True)
 
 from data.data_classes import Prediction
 from pipelines.run import CorePipeline
@@ -18,26 +17,20 @@ from utils.metrics import Metrics
 def print_metrics(detector_metrics, recognizer_metrics):
     for detector_metric in detector_metrics:
         res = detector_metric.get_metrics()
-        logging.info(f'✅ Detection metrics {detector_metric}: {res}')
-
-    print("------------------------------------------------------------------")
+        logging.info(f"✅ Detection metrics {detector_metric}: {res}")
 
     for recognizer_metric in recognizer_metrics:
         res = recognizer_metric.get_metrics()
-        logging.info(f'✅ Recognizer metrics {recognizer_metric}: {res}')
+        logging.info(f"✅ Recognizer metrics {recognizer_metric}: {res}")
 
 
-@hydra.main(version_base=None, config_path='../config', config_name='evaluate')
-def evaluate(cfg: DictConfig):
-    print(cfg)
-    pipeline: CorePipeline = instantiate(cfg['shift_ocr'])
-    logging.info(f'⏰ Evaluating {len(pipeline._loader)} images ⏰')
+@hydra.main(version_base=None, config_path="../config", config_name="evaluate")
+def evaluate(cfg: DictConfig):  # noqa: WPS210
+    pipeline: CorePipeline = instantiate(cfg["shift_ocr"])
+    logging.info(f"⏰ Evaluating {len(pipeline._loader)} images ⏰")
 
-    detector_metrics: Metrics = instantiate(cfg['detector_metrics'])
-    recognizer_metrics: Metrics = instantiate(cfg['recognizer_metrics'])
-
-    print(detector_metrics)
-    print(recognizer_metrics)
+    detector_metrics: Metrics = instantiate(cfg["detector_metrics"])
+    recognizer_metrics: Metrics = instantiate(cfg["recognizer_metrics"])
 
     count = 0
 
@@ -59,7 +52,7 @@ def evaluate(cfg: DictConfig):
         recognition: List[Prediction] = pipeline._recognizer.recognize(detections)
 
         for recognizer_metric in recognizer_metrics:
-            recognizer_metric.process(detections, gt_detections)
+            recognizer_metric.process(recognition, gt_detections)
 
         if count > 0 and count % cfg.print_every_step == 0:
             print_metrics(detector_metrics, recognizer_metrics)
@@ -69,5 +62,5 @@ def evaluate(cfg: DictConfig):
     print_metrics(detector_metrics, recognizer_metrics)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     evaluate()
