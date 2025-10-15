@@ -1,0 +1,13 @@
+_target_: "src.data.ocr_datamodule.OCRDataModule"
+data_path: ${paths.data_dir}
+dataset: '${paths.data_dir}/ocr_dataset_v1.parquet'
+
+vocab: 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyzЁІАБВГДЕЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯабвгдежзийклмнопрстуфхцчшщъыьэюяёіҒғҚқҢңҮүҰұҺһӘәӨө0123456789!"#$%&)*+,-./\\:;<=>?@()‚„•°[]^_`{|}~«»“”’—–₸₽№£ '
+timesteps: 32
+batch_size: 256
+num_workers: 8
+pin_memory: true
+persistent_workers: true
+input_shape: [3, 40, 200]
+
+augs: default

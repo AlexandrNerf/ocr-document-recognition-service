@@ -1,0 +1,5 @@
+hard_negative_mining:
+  _target_: src.lit_modules.callbacks.HardNegativeLogger
+  output_dir: ${paths.output_dir}
+  csv_name: "hnm.csv"
+  

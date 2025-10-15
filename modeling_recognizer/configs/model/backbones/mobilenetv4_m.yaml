@@ -1,0 +1,5 @@
+mobilenetv4_m:
+  _target_: timm.create_model
+  model_name: 'mobilenetv4_conv_medium.e250_r384_in12k_ft_in1k'
+  pretrained: false
+  features_only: true

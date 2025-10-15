@@ -1,0 +1,5 @@
+mobileone_s4:
+   _target_: timm.create_model
+   model_name: 'mobileone_s4'
+   pretrained: false
+   features_only: true

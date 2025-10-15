@@ -1,0 +1,5 @@
+convnext_t:
+   _target_: timm.create_model
+   model_name: 'convnext_tiny.in12k_ft_in1k'
+   pretrained: false
+   features_only: true
