@@ -1,0 +1,21 @@
+- _target_: doctr.transforms.RandomApply
+  transform:
+    _target_: doctr.transforms.ColorInversion
+  p: 0.1
+- _target_: torchvision.transforms.v2.RandomGrayscale
+  p: 0.5
+- _target_: torchvision.transforms.v2.RandomPhotometricDistort
+  p: 0.1
+- _target_: doctr.transforms.RandomApply
+  transform:
+    _target_: doctr.transforms.RandomShadow
+  p: 0.4
+- _target_: doctr.transforms.RandomApply
+  transform:
+    _target_: doctr.transforms.GaussianNoise
+    mean: .0
+    std: 0.1
+  p: 0.1
+- _target_: torchvision.transforms.v2.RandomPerspective
+  distortion_scale: 0.2
+  p: 0.3

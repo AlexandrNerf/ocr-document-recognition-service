@@ -1,0 +1,11 @@
+.venv
+/assets/
+/data/
+credentials.json
+/dataset
+/small_dataset/
+/data_pages/
+/logs/
+.idea/
+/big_dataset_kz/
+__pycache__/

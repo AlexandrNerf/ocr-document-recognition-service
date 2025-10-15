@@ -331,6 +331,25 @@ def GNHK():
     dataframe = pd.DataFrame({"image_path": images_row, "text": text_row})
     dataframe.to_parquet("ocr_gnhk.parquet")
 
+def HWCYR():
+    directory = "HWCYR_dataset/train"
+    if not os.path.exists(directory):
+        return None
+    dataset = pd.read_csv("HWCYR_dataset/train.tsv",sep='\t')
+
+    images_row, text_row = [], []
+    result_image = os.path.join(DATA_PATH, "images")
+    for i, (image_dir, text) in tqdm.tqdm(dataset.iterrows(), desc='Processing HWCYR'):
+        image = cv2.imread(os.path.join(directory, image_dir))
+        new_img_path = os.path.join(result_image, f'HWCYR/{i}.png')
+        cv2.imwrite(new_img_path, image)
+        images_row.append(new_img_path)
+        text_row.append(text)
+    dataframe = pd.DataFrame({"image_path": images_row, "text": text_row, 'source': ['HWCYR' for _ in range(len(images_row))]})
+    dataframe.to_parquet("ocr_hwcyr.parquet")
+    
+
+
 
 def create_ocr(base_datasets: list[str]):
     for dataset_fn in base_datasets:
@@ -338,5 +357,5 @@ def create_ocr(base_datasets: list[str]):
 
 
 if __name__ == "__main__":
-    base_datasets = [GNHK, WikiKZ]  # Вставить сюда нужные датасеты
+    base_datasets = [HWCYR]  # Вставить сюда нужные датасеты
     create_ocr(base_datasets=base_datasets)

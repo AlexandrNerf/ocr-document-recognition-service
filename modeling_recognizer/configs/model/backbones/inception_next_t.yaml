@@ -1,0 +1,5 @@
+inception_next_t:
+  _target_: timm.create_model
+  model_name: 'inception_next_tiny.sail_in1k'
+  pretrained: false
+  features_only: true

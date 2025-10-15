@@ -1,7 +1,4 @@
 .vscode
 __pycache__
-weights/detector
-weights/recognizer
 modeling_detector
-modeling_recognizer
 scripts

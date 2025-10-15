@@ -1,0 +1,5 @@
+efficientnetv2_s:
+  _target_: timm.create_model
+  model_name: 'tf_efficientnetv2_s.in21k_ft_in1k'
+  pretrained: false
+  features_only: true

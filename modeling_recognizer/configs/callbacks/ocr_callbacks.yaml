@@ -1,0 +1,26 @@
+defaults:
+  - model_checkpoint
+  - early_stopping
+  - model_summary
+  - rich_progress_bar
+  - hard_negative_mining
+  - _self_
+
+model_checkpoint:
+  dirpath: ${paths.output_dir}/checkpoints
+  filename: "epoch_{epoch:03d}"
+  monitor: "val/cer"
+  mode: "min"
+  save_last: True
+  save_weights_only: True
+  save_on_train_epoch_end: True
+  every_n_train_steps: 400
+  auto_insert_metric_name: True
+
+early_stopping:
+  monitor: "val/harmonic_mean"
+  patience: 10
+  mode: "min"
+
+model_summary:
+  max_depth: -1
