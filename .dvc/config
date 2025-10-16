@@ -3,5 +3,7 @@
     autostage = true
 ['remote "models"']
     url = https://huggingface.co/NerfmanOriginal/ocr-diploma-models
+    ssl_verify = false
 ['remote "data"']
-    url = https://huggingface.co/datasets/NerfmanOriginal/OCR-data-900k\
+    url = https://huggingface.co/datasets/NerfmanOriginal/OCR-data-900k
+    ssl_verify = false
