@@ -15,7 +15,7 @@ poetry install
 Перед началом запуска надо подтянуть веса
 
 ```
-dvc get https://huggingface.co/NerfmanOriginal/ocr-diploma-models crnn_vgg16_lstm256_baseline__2025_10_08.pth -o /weights
+dvc get https://huggingface.co/NerfmanOriginal/ocr-diploma-models crnn_vgg16_lstm256_baseline__2025_10_08.pth -o /weights/
 ```
 
 Теперь можно работать с нашим ядром
