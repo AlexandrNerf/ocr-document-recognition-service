@@ -10,12 +10,12 @@ pip install poetry=2.2.1
 poetry install
 ```
 
-## Запуск
+## Запуск ядра
 
 Перед началом запуска надо подтянуть веса
 
 ```
-dvc pull -r models
+dvc get https://huggingface.co/NerfmanOriginal/ocr-diploma-models crnn_vgg16_lstm256_baseline__2025_10_08.pth -o /weights
 ```
 
 Теперь можно работать с нашим ядром
