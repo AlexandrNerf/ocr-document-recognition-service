@@ -1,5 +1,0 @@
-outs:
-- md5: d7e16b43b3ecb2b40aabf01a43787e11
-  size: 4895832
-  hash: md5
-  path: ocr_dataset_v2_50k.parquet

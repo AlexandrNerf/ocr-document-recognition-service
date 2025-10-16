@@ -1,3 +1,5 @@
 *_dataset/*
 *.parquet
 *.ipynb
+/ocr_dataset.zip
+/ocr_dataset
