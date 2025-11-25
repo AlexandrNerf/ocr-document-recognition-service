@@ -23,3 +23,9 @@ dvc get https://huggingface.co/NerfmanOriginal/ocr-diploma-models crnn_vgg16_lst
 Для этого переходим в папку `/core`
 
 Там инструкции и подробный пайплайн
+
+## Запуск обучения
+
+Для запуска обучения зайти в modeling_recognizer
+
+Там подробно описаны все шаги в README
