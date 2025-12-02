@@ -2,8 +2,11 @@ from collections import Counter
 
 import numpy as np
 import torch
-from constansts import EPS, SPECIAL_VOCAB_CHARS
 from doctr.models.recognition.crnn.pytorch import CTCPostProcessor
+
+# Константы
+EPS = -1e10
+SPECIAL_VOCAB_CHARS = "0123456789!$#()?-.,:;@%&*+=[]{}\""
 
 duplicate_map = {
     "А": "A",
