@@ -11,7 +11,7 @@ rootutils.setup_root(__file__, indicator=".core-root", pythonpath=True)
 
 from data.data_classes import Prediction
 from pipelines.run import CorePipeline
-from utils.get_core import get_shift_ocr_instance
+from utils.get_core import get_core_api_instance
 from utils.base64utils import decode_image
 from utils.BBoxVisualizer import BoundingBoxVisualizer
 from utils.html_generator import fig_to_html
@@ -29,7 +29,7 @@ def get_pipeline() -> CorePipeline:
     """Получает или создает экземпляр пайплайна"""
     global _pipeline_instance
     if _pipeline_instance is None:
-        _pipeline_instance = get_shift_ocr_instance()
+        _pipeline_instance = get_core_api_instance()
     return _pipeline_instance
 
 

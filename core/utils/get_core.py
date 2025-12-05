@@ -8,7 +8,7 @@ from omegaconf import DictConfig
 rootutils.setup_root(__file__, indicator=".core-root", pythonpath=True)
 
 
-def get_shift_ocr_instance():
+def get_core_api_instance():
     """Создает экземпляр CorePipeline из конфига API"""
     # Определяем корень core директории
     current_dir = os.path.dirname(os.path.abspath(__file__))
