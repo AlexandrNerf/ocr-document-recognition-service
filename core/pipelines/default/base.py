@@ -17,6 +17,8 @@ class BasePipeline(ABC):
             logging.exception(
                 f"Ошибка при инициализации пайплайна {self.__class__.__name__}: {e}"
             )
+            # Пробрасываем исключение, чтобы объект не создавался в невалидном состоянии
+            raise
 
     def _init(self, *args, **kwargs):
         pass

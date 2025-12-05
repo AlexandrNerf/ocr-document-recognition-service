@@ -1,5 +1,5 @@
-from shift_ocr.shift_ocr.loader import Loader
-from shift_ocr.utils.base64utils import decode_image
+from pipelines.default.loader import Loader
+from utils.base64utils import decode_image
 
 
 class APILoader(Loader):
