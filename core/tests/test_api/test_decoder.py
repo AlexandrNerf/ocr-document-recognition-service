@@ -7,7 +7,7 @@ import rootutils
 
 rootutils.setup_root(__file__, indicator=".project-roots", pythonpath=True)
 
-from shift_ocr.utils.base64utils import decode_image
+from utils.base64utils import decode_image
 
 
 @pytest.fixture
