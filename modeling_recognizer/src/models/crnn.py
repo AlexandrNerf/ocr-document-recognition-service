@@ -118,6 +118,7 @@ class CRNNModel(LightningModule):
             crnn_net.cuda()
             crnn_net.feat_extractor.cuda()
             crnn_net.decoder.cuda()
+            hydra.utils.log.info(f'Device is set to CUDA')
             torch.set_float32_matmul_precision('high')
 
         self.net = crnn_net

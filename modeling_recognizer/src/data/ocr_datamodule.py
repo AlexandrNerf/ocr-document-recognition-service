@@ -19,11 +19,6 @@ from doctr import transforms as T
 from omegaconf import DictConfig, OmegaConf
 # Аугментации
 from src.data.components.ocr_dataset import OCRDataset
-from src.data.components.augumentation_components.augmentations import augs_train, augs_val
-
-
-# def _instantiate_recursive(cfg):
-#     if '_target_' in node
 
 
 class OCRDataModule(LightningDataModule):

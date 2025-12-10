@@ -29,7 +29,7 @@ model:
   backbone:
     name: 'vgg16'
     pretrained: true
-  weights_path: ../weights/recognizer/crnn_vgg16_lstm256_baseline__2025_10_07.pth
+  weights_path: ../weights/crnn_vgg16_lstm256_baseline__2025_10_08.pth
 
 data:
   num_workers: 4
