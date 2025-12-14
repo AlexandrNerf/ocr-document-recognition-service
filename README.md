@@ -22,7 +22,7 @@
 ## Структура репозитория
 
 ```bash
-core
+project
 ├── core                     <- Папка с ядром проекта, сервисом на API и инференсом
 │
 ├── modeling_recognizer      <- Папка с моделингом Pytorch Lightning + Hydra для обучения моделей OCR
