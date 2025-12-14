@@ -1,6 +1,7 @@
 from random import randint as rand
 
 import numpy as np
+import cv2
 import plotly.graph_objects as go
 from data.data_classes import Prediction
 from PIL import Image
@@ -77,7 +78,11 @@ class BoundingBoxVisualizer:
         if isinstance(image_path, Image.Image):
             image = image_path
         elif isinstance(image_path, np.ndarray):
-            image = Image.fromarray(image_path)
+            if len(image_path.shape) == 3 and image_path.shape[2] == 3:
+                image_rgb = cv2.cvtColor(image_path, cv2.COLOR_BGR2RGB)
+                image = Image.fromarray(image_rgb)
+            else:
+                image = Image.fromarray(image_path)
         else:
             image = Image.open(image_path)
 
@@ -85,7 +90,8 @@ class BoundingBoxVisualizer:
         scale = max_width / width
         width, height = int(width * scale), int(height * scale)
         image = image.resize((int(width), int(height)))
-        fig = go.Figure(go.Image(z=image))
+        image_array = np.array(image)
+        fig = go.Figure(go.Image(z=image_array))
 
         fig.update_layout(
             width=width,

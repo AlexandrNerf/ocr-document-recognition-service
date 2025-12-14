@@ -5,6 +5,7 @@ from typing import Optional
 import rootutils
 import uvicorn
 from fastapi import FastAPI, HTTPException, UploadFile, File, Form
+from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import HTMLResponse, JSONResponse
 
 rootutils.setup_root(__file__, indicator=".core-root", pythonpath=True)
@@ -17,6 +18,20 @@ from utils.BBoxVisualizer import BoundingBoxVisualizer
 from utils.html_generator import fig_to_html
 
 app = FastAPI()
+
+# Настройка CORS
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=[
+        "http://localhost:5173",  # Vite dev server
+        "http://localhost:3000",  # Альтернативный порт для dev
+        "http://127.0.0.1:5173",
+        "http://127.0.0.1:3000",
+    ],
+    allow_credentials=True,
+    allow_methods=["*"],  # Разрешаем все HTTP методы
+    allow_headers=["*"],  # Разрешаем все заголовки
+)
 
 # Хранилище задач (в продакшене лучше использовать Redis или БД)
 tasks: dict[str, dict] = {}
