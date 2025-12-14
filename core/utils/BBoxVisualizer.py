@@ -90,8 +90,7 @@ class BoundingBoxVisualizer:
         scale = max_width / width
         width, height = int(width * scale), int(height * scale)
         image = image.resize((int(width), int(height)))
-        image_array = np.array(image)
-        fig = go.Figure(go.Image(z=image_array))
+        fig = go.Figure(go.Image(z=image))
 
         fig.update_layout(
             width=width,
