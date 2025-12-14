@@ -53,9 +53,11 @@ core
 conda create -n ocr-project python=3.10.16
 conda activate ocr-project
 
-pip install poetry=2.2.1
+pip install poetry==2.2.1
 poetry install
 ```
+
+При невозможности установить `torch` из оф. источников он подтянется в версии `cpu` с другого места.
 
 Подробнее про зависимости модуля можно прочитать в файлах `pyproject.toml` и `poetry.lock`
 
