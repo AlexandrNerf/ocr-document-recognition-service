@@ -315,17 +315,18 @@ dependencies = [
     "widgetsnbextension (==4.0.14)",
     "wsproto (==1.2.0)",
     "xyzservices (==2025.4.0)",
-    "yarl (==1.22.0)",
+    "yarl (==1.22.0)",1
     "zc-lockfile (==4.0)",
     "zipp (==3.23.0)",
     "zstandard (==0.25.0)",
-    "torch (==2.6.0)",
+    "torch (==2.7.0)",
     "torchvision (==0.21.0)",
     "torchmetrics (==1.8.2)",
     "unicorn (>=2.1.4,<3.0.0)",
     "uvicorn (>=0.38.0,<0.39.0)",
     "opencv-python (==4.11.0.86)",
-    "python-multipart (>=0.0.20,<0.0.21)"
+    "python-multipart (>=0.0.20,<0.0.21)",
+    "surya-ocr (==0.17.1)"
 ]
 
 
@@ -334,14 +335,12 @@ requires = ["poetry-core>=2.0.0,<3.0.0"]
 build-backend = "poetry.core.masonry.api"
 
 [[tool.poetry.source]]
-name = "torch"
+name = "pytorch-cu118"
 url = "https://download.pytorch.org/whl/cu118"
-priority = "supplemental"
+priority = "explicit"
 
-[[tool.poetry.source]]
-name = "aliyun"
-url = "https://mirrors.aliyun.com/pypi/simple/"
-priority = "primary"
-
+[tool.poetry.dependencies]
+torch = { source = "pytorch-cu118" }
+torchvision = { source = "pytorch-cu118" }
 
 
