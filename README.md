@@ -17,7 +17,11 @@
 
 Выходом модели является изображение с локализацией текста и предсказаниями в отдельных bounding boxes. Также для проверки качества модели и отладки возвращаются и конфиденсы для детекции и распознавания отдельно.
 
+## Метрики
 
+Результат последней модели parseq + fast:
+
+![alt text](.ignore/metrics.png)
 
 ## Структура репозитория
 
@@ -72,8 +76,15 @@ poetry install
 Перед началом запуска надо подтянуть веса:
 
 ```
-dvc get https://huggingface.co/NerfmanOriginal/ocr-diploma-models crnn_vgg16_lstm256_baseline__2025_10_08.pth -o /weights/ # актуальные веса на момент выпуска
+dvc get https://huggingface.co/NerfmanOriginal/ocr-diploma-models parseq_baseline__2026_02_11.pth -o /weights/
 ```
+
+Список актуальных весов, скачиваемых через huggingface:
+| Название модели | Актуальные веса |
+|-|-|
+| parseq_base | `parseq_baseline__2026_02_11.pth` |
+
+| crnn_vgg16_lstm256 | `crnn_vgg16_lstm256_baseline__2025_10_08.pth`|
 
 Теперь переходим в папку `/core`.
 

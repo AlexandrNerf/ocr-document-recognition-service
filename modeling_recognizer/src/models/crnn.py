@@ -137,6 +137,8 @@ class CRNNModel(LightningModule):
 
         self.cer_test = CERMetric()
         self.wer_test = WERMetric()
+        self.cer_train = CERMetric()
+        self.wer_train = WERMetric()
 
     def forward(self, x):
         image, text, _ = x
@@ -153,7 +155,8 @@ class CRNNModel(LightningModule):
         self.best_cer.reset()
         self.best_wer.reset()
 
-
+        self.cer_train.reset()
+        self.wer_train.reset()
         self.cer_test.reset()
         self.wer_test.reset()
 
@@ -164,11 +167,18 @@ class CRNNModel(LightningModule):
         loss = output['loss']
 
         self.train_loss(loss)
-
+        self.cer_train(output['preds'], labels) 
+        self.wer_train(output['preds'], labels)
         self.log(
             'train/loss', self.train_loss, on_step=True, on_epoch=False, prog_bar=True
         )
-        if batch_idx % 5 == 0:
+        self.log(
+            'train/cer', self.cer_train, on_step=True, on_epoch=False, prog_bar=True
+        )
+        self.log(
+            'train/wer', self.wer_train, on_step=True, on_epoch=False, prog_bar=True
+        )
+        if batch_idx % 20 == 0:
             hydra.utils.log.info(
                 f"Обучение. Эпоха: {self.current_epoch}, Лосс: {loss:.4f}, промежуточные результаты:"
             )
@@ -247,29 +257,9 @@ class CRNNModel(LightningModule):
         self.cer_test(output['preds'], labels)
         self.wer_test(output['preds'], labels)
         
-        # Логирование
         self.log('test/loss', self.test_loss, on_step=True, on_epoch=False, prog_bar=True)
-
-        # Вывод всех неправильных предсказаний
-        incorrect_predictions = []
-        for _, (pred, true) in enumerate(zip(output['preds'], labels)):
-            predicted_text = pred[0]  # Предполагаем, что pred имеет формат [['text1'], ['text2'], ...]
-            if predicted_text != true:
-                incorrect_predictions.append((predicted_text, true))
-
-        # Логируем только если есть ошибки (чтобы не засорять вывод)
-        if incorrect_predictions:
-            for pred_text, true_text in incorrect_predictions:
-                hydra.utils.log.info(
-                    f"Тест: предсказание='{pred_text}', истинная метка='{true_text}'"
-                )
-            
-            # Дополнительно выводим статистику по батчу
-            total = len(output['preds'])
-            incorrect = len(incorrect_predictions)
-            hydra.utils.log.info(
-                f"Ошибки в батче: {incorrect}/{total} ({incorrect/total:.1%})"
-            )
+        self.log('test/cer', self.cer_test, on_step=True, on_epoch=False, prog_bar=True)
+        self.log('test/wer', self.wer_test, on_step=True, on_epoch=False, prog_bar=True)
 
     def on_test_epoch_end(self):
         test_loss = self.test_loss.compute()
@@ -285,9 +275,6 @@ class CRNNModel(LightningModule):
             'test/harmonic_mean' : h_mean,
         }, prog_bar=True)
 
-        self.test_loss.reset()
-        self.cer_test.reset()
-        self.wer_test.reset()
 
         
     def on_train_end(self) -> None:

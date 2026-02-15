@@ -29,8 +29,6 @@ class OCRDataset(Dataset):
         try:
             img = Image.open(img_path)
             img = img.convert('RGB')
-            img = np.array(img) 
-            img = torch.from_numpy(img).permute(2,0,1).float() / 255.0
         except Exception as e:
             print(f'Error loading {filename}: {e}')
             return None, None

@@ -1,5 +1,6 @@
 import multiprocessing as mp
 import os
+import torch
 import pandas as pd
 import numpy as np
 from typing import Any, Dict, Optional
@@ -12,15 +13,15 @@ from torchvision.transforms.v2 import (
     RandomGrayscale,
     RandomPerspective,
     RandomPhotometricDistort,
+    RandomRotation,
+    ToImage,
+    ToDtype
 )
 from hydra.utils import instantiate
 from doctr import transforms as T
-
 from omegaconf import DictConfig, OmegaConf
 # Аугментации
 from src.data.components.ocr_dataset import OCRDataset
-
-
 class OCRDataModule(LightningDataModule):
     """`LightningDataModule` для OCR датасета.
 
@@ -40,12 +41,13 @@ class OCRDataModule(LightningDataModule):
         num_workers: int = 4,
         pin_memory: bool = True,
         persistent_workers: bool = True,
+        train_frac: float = 0.85,
     ):
         super().__init__()
         self.save_hyperparameters(logger=False)
         self.input_shape = tuple()
         self.batch_size_per_device = self.hparams.batch_size
-
+        self.train_frac = train_frac
         if not isinstance(self.hparams.num_workers, int):
             self.num_workers = min(8, mp.cpu_count())
         else:
@@ -55,13 +57,17 @@ class OCRDataModule(LightningDataModule):
         self.augmentations = instantiate(OmegaConf.load(augs_path))
         print(self.augmentations)
         self.train_transform = Compose([
-            T.Resize((input_shape[1], input_shape[2]), preserve_aspect_ratio=True),
-            # Augmentations
-            *self.augmentations
+            ToImage(),
+            T.Resize((input_shape[1], input_shape[2]), preserve_aspect_ratio=True), 
+            *self.augmentations,
+            #T.Resize((input_shape[1], input_shape[2]), preserve_aspect_ratio=True),                      
+            ToDtype(torch.float32, scale=True),  
         ])
         print(self.train_transform)
         self.val_transform = Compose([
+            ToImage(),     
             T.Resize((input_shape[1], input_shape[2]), preserve_aspect_ratio=True),
+            ToDtype(torch.float32, scale=True),
         ])
 
         self.train_dataset: Optional[Dataset] = None
@@ -88,8 +94,7 @@ class OCRDataModule(LightningDataModule):
         # Создаем датасеты только если они еще не созданы
         if not self.train_dataset and not self.val_dataset:
             data_len = len(self.dataset_frame)
-            train_frac = 0.8
-            train_idx = np.random.choice(data_len, size=int(data_len * train_frac), replace=False)
+            train_idx = np.random.choice(data_len, size=int(data_len * self.train_frac), replace=False)
             
             # создаём маску
             train = np.zeros(data_len, dtype=bool)

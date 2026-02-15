@@ -9,7 +9,7 @@
 <a href="https://github.com/ashleve/lightning-hydra-template"><img alt="Template" src="https://img.shields.io/badge/-Lightning--Hydra--Template-017F2F?style=flat&logo=github&labelColor=gray"></a><br>
 
 Репозиторий для обучения моделей OCR. 
-Реализация обучения CRNN из библиотеки docTR
+Реализация обучения CRNN и parseq из библиотеки docTR
 
 </div>
 
@@ -71,9 +71,7 @@
 
 **Важно**: при любом раскладе скачаются все фотографии (их около 900k), их число в разных версиях датасета не будет сокращаться.
 
-Бейзлайном является датасет `ocr_dataset_v2_50k.parquet` - версия со всеми наборами данных, но отобрано только 50 тысяч.
-
-#TODO: актуализировать датасет до версии v3 с добавлением hwcyr датасета
+Бейзлайном является датасет `ocr_dataset_v3_hnm.parquet` - версия со всеми наборами данных, но отобрано только 50 тысяч.
 
 ## 🚀  Запуск
 
@@ -86,10 +84,10 @@ python src/train.py
 Для запуска экспериментов добавим:
 
 ```bash
-python src/train.py experiment=baseline.yaml
+python src/train.py experiment=<EXP_NAME>.yaml
 ```
 
-Имя конфига выбираем в соответствии с `configs/experiment` файлами. На данный момент бейзлайн - строка выше.
+Имя конфига выбираем в соответствии с `configs/experiment` файлами. На данный момент бейзлайн - `baseline_parseq_hnm_rerun.yaml`.
 
 Для валидации:
 

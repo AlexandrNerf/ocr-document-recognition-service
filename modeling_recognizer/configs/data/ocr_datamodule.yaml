@@ -6,6 +6,7 @@ vocab: 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyzЁІАБВГДЕЖЗ
 timesteps: 32
 batch_size: 256
 num_workers: 8
+train_frac: 0.85
 pin_memory: true
 persistent_workers: true
 input_shape: [3, 40, 200]
