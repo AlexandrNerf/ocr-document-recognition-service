@@ -1,0 +1,55 @@
+- _target_: doctr.transforms.RandomApply
+  transform:
+    _target_: doctr.transforms.ColorInversion
+  p: 0.2
+
+- _target_: torchvision.transforms.v2.RandomGrayscale
+  p: 0.25
+
+- _target_: torchvision.transforms.v2.RandomPhotometricDistort
+  brightness: [0.95, 1.05]   # ±5%
+  contrast: [0.95, 1.05]
+  saturation: [0.95, 1.05]
+  hue: [-0.02, 0.02]
+  p: 0.2
+
+- _target_: doctr.transforms.RandomApply
+  transform:
+    _target_: doctr.transforms.RandomShadow
+  p: 0.2
+
+- _target_: doctr.transforms.RandomApply
+  transform:
+    _target_: doctr.transforms.GaussianNoise
+    mean: 0.0
+    std: 0.1
+  p: 0.3
+
+# - _target_: doctr.transforms.RandomApply
+#   transform:
+#     _target_: doctr.transforms.GaussianBlur
+#     std: [0.3, 1.2]
+#   p: 0.3
+
+- _target_: doctr.transforms.RandomApply
+  transform:
+    _target_: src.data.components.augmentations.RandomApplyJpeg
+    min_quality: 70
+    max_quality: 90
+  p: 0.4
+
+- _target_: doctr.transforms.RandomApply
+  transform: 
+    _target_: torchvision.transforms.v2.RandomRotation
+    degrees: 3
+  p: 0.4
+
+- _target_: torchvision.transforms.v2.RandomPerspective
+  distortion_scale: 0.1
+  p: 0.6
+
+- _target_: torchvision.transforms.v2.RandomErasing
+  p: 0.25
+  scale: [0.02, 0.05]
+  ratio: [0.5, 2.0]
+  value: 0
