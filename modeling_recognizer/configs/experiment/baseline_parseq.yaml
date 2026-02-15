@@ -1,0 +1,58 @@
+# @package _global_
+
+# to execute this experiment run:
+# python train.py experiment=example
+
+defaults:
+  - override /data: ocr_datamodule
+  - override /model: parseq
+  - override /callbacks: ocr_callbacks
+  - override /trainer: default
+  - override /logger: tensorboard
+  - override /paths: ocr_paths
+
+# all parameters below will be merged with parameters from default configurations set above
+# this allows you to overwrite only specified parameters
+
+tags: ["parseq", "baseline", "ocr_dataset_v3"]
+
+experiment_name: 'baseline_parseq'
+
+#ckpt_path: logs\train\baseline_parseq\runs\2026-02-07_14-23-57\checkpoints\epoch_epoch=008.ckpt # to resume experiment
+seed: 12345 
+
+trainer:
+  min_epochs: 0
+  max_epochs: 0
+  gradient_clip_val: 0.5
+
+
+
+model:
+  pretrained: true
+  weights_path: ..\weights\parseq_baseline__2026_02_09.pth
+  optimizer:
+    _target_: "torch.optim.AdamW"
+    _partial_: true
+    lr: 1e-3
+    weight_decay: 5e-4
+    betas:
+      - 0.9
+      - 0.997
+    eps: 1e-6
+
+  scheduler:
+    _target_: "src.lit_modules.schedulers.ChainCyclicLR"
+    _partial_: true
+    lr_min: 1e-5
+    lr_max: 1e-3
+    T0: 3000
+    warmup_steps: 500
+    scale_factor: 0.7
+
+data:
+  input_shape: [3, 32, 128] # base 
+  num_workers: 4
+  batch_size: 128
+  augs: hard
+  dataset: '${paths.data_dir}/ocr_dataset_v3_31_len.parquet'
