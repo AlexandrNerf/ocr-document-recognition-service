@@ -118,7 +118,7 @@ class SimplePostprocessor(Postprocessor):
 
         for box in detections:
             box.absolute_box = self.sort_vertices_order(box.absolute_box)
-            bbox = np.array(box.absolute_box)
+            bbox = np.array(box.absolute_box) 
 
             # Определяем размеры результирующего прямоугольника
             width = int(

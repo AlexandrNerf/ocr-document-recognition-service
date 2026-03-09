@@ -1,5 +1,6 @@
 import numpy as np
 import panel as pn
+import json
 from data.data_classes import Prediction
 from pipelines.default.visualizer import Visualizer
 from utils.BBoxVisualizer import BoundingBoxVisualizer
@@ -23,24 +24,37 @@ class SimpleVisualizer(Visualizer):  # noqa: WPS338
                 BoundingBoxVisualizer.show_image(image, prediction, self.max_width)
             )
 
-    def visualize(
-        self, images: list[np.array], predictions: list[list[Prediction]]
-    ) -> None:
+    import plotly.graph_objects as go
+
+    def create_structure_figures(self, images: list[np.array], documents):
+        doc_figs = []
+        for img, document in zip(images, documents):
+            doc_figs.append(BoundingBoxVisualizer.visualize_full_document(img, document))
+        return doc_figs
+
+
+    def visualize(self, data: dict) -> None:
         """Вывод изображений с использованием BoundingBoxVisualizer
         Args:
-            images (list[np.array]): Список изображений
-            post_detections (list[Prediction]): Детекции с кропами
+            data (dict): словарь с результатом работы модели
 
         Returns:
             out (None): Выведенные изображения
         """
-        self.update_figures(images, predictions)
+        self.update_figures(data['crop_images'], data['predictions'])
+
+        for i, doc in enumerate(data['documents']):
+            with open(f'assets/results/{i}.json', 'w+', encoding='utf-8') as f:
+                json.dump(doc.to_json(), f)
+
 
         if len(self.figs) < 1:
             return Exception("Not founded images to visualize")
 
         panel = pn.Column()
         for fig in self.figs:
+            panel.append(pn.pane.Plotly(fig, config={"responsive": True}))
+        for fig in self.create_structure_figures(data['crop_images'], data['documents']):
             panel.append(pn.pane.Plotly(fig, config={"responsive": True}))
 
         panel.show()

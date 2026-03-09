@@ -144,6 +144,77 @@ class BoundingBoxVisualizer:
             margin=dict(l=0, r=200, t=0, b=0),
         )
         return fig
+    
+    @staticmethod
+    def visualize_full_document(image: np.ndarray, document):
+        """
+        image: np.array изображения документа (H x W x C)
+        document: объект Document с блоками, линиями и таблицами
+        """
+        h, w = image.shape[:2]
+        fig = go.Figure()
+        
+        # ----------------- фон -----------------
+        fig.add_trace(go.Image(z=image))
+        
+        # ----------------- блоки -----------------
+        for block in document.blocks:
+            poly = np.array(block.polygon)
+            x, y = poly[:, 0], poly[:, 1]
+            x = np.append(x, x[0])
+            y = np.append(y, y[0])
+            
+            fig.add_trace(
+                go.Scatter(
+                    x=x, y=y,
+                    mode="lines",
+                    line=dict(color="red", width=2),
+                    name=f"Block: {block.type}"
+                )
+            )
+            
+            # ----------------- линии внутри -----------------
+            struct = getattr(block, "structure", None)
+            if struct is None:
+                continue
+            
+            # линии текста
+            if hasattr(struct, "lines"):
+                for line in struct.lines:
+                    line_poly = np.array(line.polygon)
+                    lx, ly = line_poly[:, 0], line_poly[:, 1]
+                    lx = np.append(lx, lx[0])
+                    ly = np.append(ly, ly[0])
+                    
+                    fig.add_trace(
+                        go.Scatter(
+                            x=lx, y=ly,
+                            mode="lines",
+                            line=dict(color="blue", width=1),
+                            name="Line"
+                        )
+                    )
+            
+            # таблицы
+            if hasattr(struct, "rows"):
+                for row in struct.rows:
+                    for cell in row.cells:
+                        cell_poly = np.array(cell.compute_polygon())
+                        if len(cell_poly) < 1:
+                            continue
+                        cx, cy = cell_poly[:, 0], cell_poly[:, 1]
+                        cx = np.append(cx, cx[0])
+                        cy = np.append(cy, cy[0])
+                        
+                        fig.add_trace(
+                            go.Scatter(
+                                x=cx, y=cy,
+                                mode="lines",
+                                line=dict(color="green", width=1),
+                                name="Cell"
+                            )
+                        )
+        return fig
 
     @staticmethod
     def show_crop(image_path: str | np.ndarray | Image.Image, prediction: Prediction):
