@@ -4,3 +4,5 @@ modeling_detector
 scripts
 *.zip
 /weights
+modeling_page_segma/data
+modeling_page_segma/runs

@@ -1,0 +1,6 @@
+_target_: pipelines.page_detector.yolo_obb.YOLOPageDetector
+
+weights_path: ../weights/obb_segmentation_page.pt
+threshold: 0.3
+mode: warp
+run_no_page_det: ${run_no_page_det}
