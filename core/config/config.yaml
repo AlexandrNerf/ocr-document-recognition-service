@@ -10,3 +10,5 @@ hydra:
     dir: ../.
 
 images_dir: assets/images
+run_no_wrap: false
+run_no_page_det: false

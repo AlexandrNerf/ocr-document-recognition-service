@@ -10,7 +10,7 @@ class Postprocessor(BasePipeline):
         return {
             "post_detections": [
                 self.postprocessing(detections, image)
-                for detections, image in zip(data["detections"], data["images"])
+                for detections, image in zip(data["detections"], data["crop_images"])
             ]
         }
 

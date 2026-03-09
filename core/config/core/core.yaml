@@ -2,7 +2,10 @@ _target_: pipelines.run.CorePipeline
 defaults:
   - loader: image_loader
   - detector: fast
+  - page_detector: yolo_obb
+  - doc_unwrapper: uvdoc
   - postprocessor: simple
   - preprocessor: simple
-  - recognizer: crnn
+  - recognizer: parseq
+  - layout_creator: surya
   - visualizer: simple
