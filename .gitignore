@@ -6,3 +6,4 @@ scripts
 /weights
 modeling_page_segma/data
 modeling_page_segma/runs
+modeling_recognizer/result

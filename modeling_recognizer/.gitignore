@@ -9,3 +9,5 @@ credentials.json
 .idea/
 /big_dataset_kz/
 __pycache__/
+
+/result
