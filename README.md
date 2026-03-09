@@ -14,7 +14,9 @@
 
 ## Выход модели
 
-Выходом модели является изображение с локализацией текста и предсказаниями в отдельных bounding boxes. Также для проверки качества модели и отладки возвращаются и конфиденсы для детекции и распознавания отдельно.
+Выходом модели является изображение с локализацией текста и предсказаниями в отдельных bounding boxes. Также для проверки качества модели и отладки возвращаются и конфиденсы для детекции и распознавания отдельно. 
+
+В текущей итерации модели также важно отметить
 
 ## Метрики
 
@@ -60,9 +62,25 @@ conda activate ocr-project
 
 pip install poetry==2.2.1
 poetry install
+
+pip install paddlepaddle 
+pip install paddleocr
 ```
 
 При невозможности установить `torch` из оф. источников он подтянется в версии `cpu` с другого места.
+
+Также для работы некоторых моделей необходимо установить:
+
+```
+# for CUDA
+pip install paddlepaddle-gpu==3.0.0 -i https://www.paddlepaddle.org.cn/packages/stable/cu118/
+
+# for CPU
+pip install paddlepaddle==3.0.0 -i https://www.paddlepaddle.org.cn/packages/stable/cpu/
+
+pip install paddleocr==3.4.0
+```
+Рекомендуется устанавливать именно paddlepaddle-gpu по возможности.
 
 Подробнее про зависимости модуля можно прочитать в файлах `pyproject.toml` и `poetry.lock`
 
@@ -77,7 +95,9 @@ poetry install
 Перед началом запуска надо подтянуть веса:
 
 ```
-dvc get https://huggingface.co/NerfmanOriginal/ocr-diploma-models parseq_baseline__2026_02_11.pth -o /weights/
+dvc get https://huggingface.co/NerfmanOriginal/ocr-diploma-models parseq_baseline__2026_02_11.pth -o /weights/ # Веса модели для распознавания текстов
+
+dvc get https://huggingface.co/NerfmanOriginal/ocr-diploma-models obb_segmentation_page.pt -o /weights/ # Веса модели для сегментации страниц
 ```
 
 Список актуальных весов, скачиваемых через huggingface:
